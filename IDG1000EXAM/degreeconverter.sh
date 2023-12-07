@@ -15,12 +15,14 @@ awk '{print $2}' coordinates/coordsonly.txt > coordinates/longtitude.txt
 sed 's/°/ /g' coordinates/latitude.txt | sed 's/\′/ /g' | sed 's/\″//g' > coordinates/latitude-no-symbol.txt 
 sed 's/°/ /g' coordinates/longtitude.txt | sed 's/\′/ /g' | sed 's/\″//g' > coordinates/longtitude-no-symbol.txt
 
-#converting the numbers into decimal: minutes/60 , seconds/3600. Add together into complete number 
+#converting the numbers into decimal: minutes/60 , seconds/3600. Add together into complete number
+# the output is also cut down to no more than the 4th decimal to comply with met.no's terms of service
 # Process latitude file
-awk '{ result = $1 + $2/60 + $3/3600; print "LAT= " result }' coordinates/latitude-no-symbol.txt > coordinates/latitude_result.txt
+awk '{ result = $1 + $2/60 + $3/3600; printf "LAT= %.4f\n", result }' coordinates/latitude-no-symbol.txt > coordinates/latitude_result.txt
 
 # Process longitude file
-awk '{ result = $1 + $2/60 + $3/3600; print "LON= " result }' coordinates/longtitude-no-symbol.txt > coordinates/longtitude_result.txt
+awk '{ result = $1 + $2/60 + $3/3600; printf "LON= %.4f\n", result }' coordinates/longtitude-no-symbol.txt > coordinates/longitude_result.txt
+
 
 #merge the to files into 1
-paste coordinates/latitude_result.txt coordinates/longtitude_result.txt > decimalcoord.txt
+paste coordinates/latitude_result.txt coordinates/longitude_result.txt > decimalcoord.txt

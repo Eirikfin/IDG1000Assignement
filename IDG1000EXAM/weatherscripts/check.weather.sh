@@ -56,8 +56,8 @@ while IFS=$'\t' read -r url place lat lon t rain date_for date_updated date_expi
                     head -n 1 |\
                     sed -E 's|.*value="([^"]*)".*|\1|' )
             # update 'date_updated' and "date_expires"
-            date_updated=$(grep -i "^date:" <<< "$head" | cut -d' ' -f2-)
-            date_expires=$(grep -i "^expires:" <<< "$head"| cut -d' ' -f2-)
+            date_updated=$(grep -i "^date:" <<< "$head" | cut -d' ' -f2- | tr -d '/r')
+            date_expires=$(grep -i "^expires:" <<< "$head"| cut -d' ' -f2- | tr -d '/r')
             echo "[LOG] $date_now 200 received fresh data for $place, rain: $rain, t: $t" >> "${LOGS_DIR}/logs.txt"
         elif ((status == 304)); then
             echo "[LOG] $date_now 304 no fresh data for $place" >> "${LOGS_DIR}/logs.txt"
