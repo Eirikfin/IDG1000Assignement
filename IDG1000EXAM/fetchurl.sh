@@ -13,7 +13,7 @@ sed -E 's/.*<table class="sortable wikitable">(.*)<\/table>.*/\1/g' wikisite.no.
 cut -f 2 wikitable.txt > column2.txt
 
 #1st line blank so population matches up with the loop later on
-echo "" population.txt >population.txt
+echo "" >population.txt
 
 #grab the column with the population and put it in a serperate file
 cut -f 5 wikitable.txt >> population.txt
@@ -53,4 +53,5 @@ done < url-place.txt
 #merge name coordinates and population into a single file
 paste -d ' ' place.with.coords.txt population.txt > coords-population.txt
 
-
+#delete no longer needed files
+rm wikisite.txt wikitable.txt wikisite.no.newlines.txt column2.txt 

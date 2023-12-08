@@ -26,3 +26,6 @@ awk '{ result = $1 + $2/60 + $3/3600; printf "LON= %.4f\n", result }' coordinate
 
 #merge the to files into 1
 paste coordinates/latitude_result.txt coordinates/longitude_result.txt > decimalcoord.txt
+
+#delete no longer needed files
+rm -r coordinates

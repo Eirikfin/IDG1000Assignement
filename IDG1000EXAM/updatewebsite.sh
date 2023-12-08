@@ -1,16 +1,15 @@
 #!/bin/bash
 
-# Input filenames
-fulldata_file="fulldata.txt"
-template_file="html-template.html"
-output_file="output.html"
+#update the weather before refreshing the webpage
+#bash getwheater.sh
+# Loop to place the data into rightful place, and creates the paragrapghs for the webpage
+echo "" > webpage.txt
 
-# Remove the existing output file
-rm -f "$output_file"
+while read url place population lat latvalue lon lonvalue temp prec humidity weekday date month time; do
+    printf "<p><a href=\"%s\">\t%s</a> has a population of:\t%s\t Coordinates: lat: %s\t lon: %s\t The weather for tomorrow is Temperature: %s°C\t Precipation: %s mm\t Moisture: %s%% Weather last updated: %s %s %s %s</p>\n" "$url" "$place" "$population" "$latvalue" "$lonvalue" "$temp" "$prec" "$humidity" "$weekday" "$date"  "$month" "$time">> webpage.txt
+done < fulldata.txt
+#todo delete first line of webpage.txt
+webdata=$(cat webpage.txt)
+awk -v replace="$webdata" '{gsub(/<!--REPLACE-->/, replace)}1' html-template.html > index.html
 
-# Loop through each line in fulldata.txt
-while IFS=$'\t' read -r url place population lat lon temperature precipitation humidity
-do
-    # Read the HTML template and replace placeholder with data, then append to the output file
-    sed "s|<!--REPLACE-->|<p><a href=\"$url\">City: $place</a> Population: $population Latitude: $lat Longitude: $lon Temperature: $temperature Precipitation: $precipitation Humidity: $humidity</p>|g" "$template_file" >> "$output_file"
-done < "$fulldata_file"
+#todo move the index file to desired directory and update apache
